@@ -1,0 +1,208 @@
+package com.sample.ResturentProject;
+
+import com.sample.ResturentProject.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+//import com.foods.Food;
+//import com.foods.GuestOrder;
+
+
+public class ManageFood {
+	
+	ArrayList<Food> foodlist = new ArrayList<>();
+	ArrayList<GuestOrder> guestorder = new ArrayList<>();
+	Food Food;
+	public GuestOrder GuestOrder;
+	public int SelectFood;;
+
+	public ManageFood() {
+
+	}
+	Scanner bp = new Scanner(System.in);
+	public void bp() {
+		
+		System.out.println("Enter number of food add in menu");
+		int n = Integer.parseInt(bp.nextLine());
+		for (int i = 0; i < n; i++) {
+			Food food = new Food();
+			food.input();
+			foodlist.add(food);
+		}
+
+	}
+
+	public void print() {
+
+		for (int i = 0; i < foodlist.size(); i++) {
+			System.out.println((i + 1) + "." + foodlist.get(i).detail());
+		}
+	}
+	public void Price() {
+		float PriceFood=0;
+		float TotalPayment=0;
+		int number;
+		GuestOrder guest=new GuestOrder();
+		guest.input();
+		guestorder.add(guest);
+		for(int i=0; i<10 ; i++) {
+			System.out.println("Select Food"+(i+1));
+			SelectFood = bp.nextInt();
+			if(SelectFood==0) {
+				guest.setTotalPayment(TotalPayment);
+
+				System.out.println("Total Payment");
+				System.out.println(TotalPayment);
+				System.out.println("Thank you see you again");
+				break;
+				}
+			else
+			{
+				System.out.println("Enter Number");
+				number=bp.nextInt();
+				Food food=foodlist.get(SelectFood-1);
+				guest.setEatList(food);
+				PriceFood=food.price*number;
+			}
+			TotalPayment+=PriceFood;
+			System.out.println("Order Finish");
+			System.out.println("Payment "+(i+1)+" is:");
+			System.out.println(" "+PriceFood);
+			System.out.println("Finish Order enter 0");
+			
+		};
+	}
+	public void PrintOrder() {
+		for(int i=0;i<guestorder.size();i++) {
+			guestorder.get(i).print();
+		}
+	}
+	public void search() {
+		Scanner bp=new Scanner(System.in);
+		String idtable;
+		int up=0;
+		System.out.println("Enter table number payment: ");
+		idtable=bp.nextLine();
+		try
+		{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel","root","tamil");
+			
+			
+			PreparedStatement ps=con.prepareStatement("insert into search values(?)");
+			ps.setString(1,idtable);
+			//ps.setFloat(2,price);
+			//ps.setInt(3, mobileno);
+		int s=	ps.executeUpdate();
+		if(s>0) {
+			
+			System.out.println("record inserted sucessfully ");
+
+		
+		}
+		else
+		{
+			System.out.println("record not inserted");
+		}
+			
+			con.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		for(int i=0;i<guestorder.size();i++) {
+			if(guestorder.get(i).getTable().equalsIgnoreCase(idtable)) {
+				guestorder.get(i).print();
+				up++;	
+			}
+		}
+		if(up==0) {
+			System.out.println("no table number "+idtable);
+		}
+	}
+	public String EditName() {
+		System.out.println("Enter name edit: ");
+		return bp.nextLine();
+		
+	}
+
+
+	public float EditPrice() {
+		System.out.println("Enter price edit: ");
+		return bp.nextFloat();
+			}
+	
+
+	public void EditFood() {
+		String namefood;
+		int up=0;
+		System.out.println("Enter name food to fix");
+		namefood=bp.nextLine();
+		
+		for(int i=0;i<foodlist.size();i++) {
+			if(foodlist.get(i).getName().equals(namefood)) {
+				up++;
+				 foodlist.get(i).setName(EditName());
+				foodlist.get(i).SetPrice(EditPrice());
+				break;
+			}
+		}
+			if(up==0) {
+				System.out.println("No food name is "+namefood);
+			}
+		}
+	public void DeleteFood() {
+		String deletefood;
+		int up=0;
+		System.out.println("Enter name food in delete");
+		deletefood=bp.nextLine();
+		deletefood=bp.nextLine();
+		try
+		{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel","root","tamil");
+			
+			
+			PreparedStatement ps=con.prepareStatement("insert into addfood values(?,?)");
+			ps.setString(1,deletefood);
+			//ps.setFloat(2,price);
+			//ps.setInt(3, mobileno);
+		int s=	ps.executeUpdate();
+		if(s>0) {
+			
+			System.out.println("record inserted sucessfully ");
+
+		
+		}
+		else
+		{
+			System.out.println("record not inserted");
+		}
+			
+			con.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		for(int i=0;i<foodlist.size();i++) {
+			if(foodlist.get(i).getName().equals(deletefood)) {
+				up++;
+				
+				foodlist.remove(i);
+				System.out.println("Delete Finish");
+				break;
+			}
+		}
+			if(up==0) {
+				System.out.println("No food name is "+deletefood);
+			}
+	}
+
+}
+

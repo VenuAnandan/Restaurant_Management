@@ -1,0 +1,47 @@
+package com.sample.ResturentProject;
+
+
+import java.util.Scanner;
+
+public class Food {
+	 public String name;
+	 public float price;
+	 
+	 
+	 public Food(String name,float price) {
+		 this.name=name;
+		 this.price=price;
+	 }
+
+	public Food() {
+		// TODO Auto-generated constructor stub
+}
+
+	public void input() {
+		 Scanner bp=new Scanner(System.in);
+		 System.out.println("Enter Name Food");
+		 name=bp.nextLine();
+		 System.out.println("Enter Price Food");
+		 price=bp.nextFloat();
+		
+	}
+	 
+	 public void Payment() {
+		 System.out.println("Price: "+price);
+	 }
+	 public String detail() {
+		 return name+" "+price;
+	 }
+	 public float getPrice() {
+		 return price;
+	 }
+	 public String getName() {
+		 return name;
+	 }
+	 public void setName(String name) {
+		 this.name=name;
+	 }
+	 public void SetPrice(float price) {
+		 this.price=price;
+	 }
+}
